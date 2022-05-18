@@ -7,16 +7,25 @@
   "author": "Xiaocong Yan",
   "license": "ISC",
   "scripts": {
-    "client": "cd client && yarn start",
+    "client": "cd client && npm run start",
     "server": "nodemon server.js",
-    "dev": "concurrently --kill-others-on-fail \"yarn server\" \"yarn client\""
+    "dev": "concurrently --kill-others-on-fail \"npm run server\" \"npm run client\""
   },
   "dependencies": {
+    "babel-eslint": "^10.1.0",
     "body-parser": "^1.18.3",
+    "cookie-session": "^2.0.0",
+    "eslint": "^6.8.0",
+    "eslint-config-airbnb": "^18.2.0",
     "express": "^4.16.4",
+    "mongoose": "^6.3.3",
     "nodemon": "^2.0.16"
   },
   "devDependencies": {
-    "concurrently": "^4.0.1"
+    "concurrently": "^4.0.1",
+    "eslint-plugin-import": "^2.21.2",
+    "eslint-plugin-jsx-a11y": "^6.3.0",
+    "eslint-plugin-react": "^7.20.0",
+    "eslint-plugin-react-hooks": "^4 || ^3 || ^2.3.0 || ^1.7.0"
   }
 }
