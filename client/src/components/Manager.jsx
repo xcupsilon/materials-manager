@@ -39,10 +39,6 @@ const Manager = () => {
     retrieveMaterials()
   }, [])
 
-  // // everytime when materials changes
-  // useEffect(() => {
-  // }, [materials])
-
   const addMaterial = async () => {
     await axios.post('/api/materials/add_material', {_id: uuidv4()})
     .then(() => {
