@@ -1,9 +1,29 @@
 import React, { useState } from 'react'
 import { ChromePicker } from 'react-color'
+import { createUseStyles } from 'react-jss'
 
 const SelectedMaterial = () => {
   const [color, setColor] = useState('#40765B')
   const [isPicking, setIsPicking] = useState(false)
+
+  const useStyles = createUseStyles({
+    materialColor: {
+      backgroundColor: (props) => props.color
+    }
+  })
+  
+  const MaterialColor = ({children, ...props}) => {
+    const classes = useStyles(props)
+    return (
+      <button onClick={e => setIsPicking(!isPicking)} className={`rounded-full w-[2rem] h-[2rem] ${classes.materialColor}`}>
+        {children}
+      </button>
+    )
+  }
+
+  MaterialColor.defaultProps = {
+    color: color
+  }
 
   const onColorChange = (color) => {
     setColor(color.hex)
@@ -17,7 +37,7 @@ const SelectedMaterial = () => {
       </div>
       <div className="col-span-1 flex flex-col">
         <label className="font-semibold">Color</label>
-        <button onClick={e => setIsPicking(!isPicking)} className={`rounded-full w-[2rem] h-[2rem] bg-[${color.replaceAll('"', '')}] mr-4`} />
+        <MaterialColor />
         <div className="mt-4">
           {isPicking && <ChromePicker 
             color={ color }
