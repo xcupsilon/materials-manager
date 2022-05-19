@@ -1,4 +1,5 @@
 const express = require('express')
+const { body: validatorBody, validationResult } = require('express-validator')
 
 const router = express.Router()
 const Material = require('../models/material')
@@ -30,32 +31,45 @@ router.post('/materials/add_material', async (req, res) => {
     await Material.create({ _id })
     res.send(`New Material Created`)
   } catch (error) {
-    console.log(error)
     res.status(400).send('Error occurred when creating new material')
   }
 })
 
-router.post('/materials/update_material', async (req, res) => {
-  try {
-    const { body } = req
-    const {
-      _id, material, name, volume, cost, date,
-    } = body
-    await Material.updateOne({ _id },
-      {
-        $set:
+router.post(
+  '/materials/update_material',
+  validatorBody('material', 'Invalid material name').notEmpty(),
+  validatorBody('color', 'Invalid Color').isHexColor(),
+  validatorBody('volume', 'Invalid volume').isFloat({ min: 0 }),
+  validatorBody('cost', 'Invalid cost').isFloat({ min: 0 }),
+  async (req, res) => {
+    const { errors } = validationResult(req)
+    if (errors.length !== 0) {
+      res.status(400).send(`${errors[0].msg}`)
+      return
+    }
+    try {
+      const { body } = req
+      const {
+        _id, material, color, volume, cost, date,
+      } = body
+
+      await Material.updateOne({ _id },
         {
-          material: name,
-          volume,
-          cost,
-          date,
-        },
-      })
-    res.send(`Material ${material} succesfully updated.`)
-  } catch (error) {
-    res.status(400).send('Error occurred when updating material name')
-  }
-})
+          $set:
+          {
+            material,
+            color,
+            volume,
+            cost,
+            date,
+          },
+        })
+      res.send(`Material ${material} succesfully updated.`)
+    } catch (error) {
+      res.status(400).send(`Error occurred when updating material ${error.message}`)
+    }
+  },
+)
 
 router.post('/materials/delete_material', async (req, res) => {
   try {

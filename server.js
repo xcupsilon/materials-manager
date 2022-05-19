@@ -23,10 +23,6 @@ app.use(cookieSession({
   maxAge: 24 * 60 * 60 * 1000, // expiration time: 24 hours
 }))
 
-app.get('/', (req, res) => {
-  res.send('hello from root')
-})
-
 app.use('/api', ApiRouter)
 
 // Erorr handler

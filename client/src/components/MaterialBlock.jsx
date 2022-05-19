@@ -1,7 +1,7 @@
 import React from 'react'
 import { createUseStyles } from 'react-jss'
 
-const MaterialBlock = ({ name, color, volume, materialIndex, selectedMaterial, setSelectedMaterial }) => {
+const MaterialBlock = ({ name, color, volume, materialIndex, selectedMaterial, updateSelectedField }) => {
   const useStyles = createUseStyles({
     materialColor: {
       backgroundColor: (props) => props.color
@@ -24,7 +24,7 @@ const MaterialBlock = ({ name, color, volume, materialIndex, selectedMaterial, s
   // active highlight if the material is selected
   if (materialIndex === selectedMaterial) {
     return (
-      <button onClick={e => setSelectedMaterial(materialIndex)} className="flex items-center p-3 border-b-2 bg-active border-border">
+      <button onClick={e => updateSelectedField(materialIndex)} className="flex items-center p-3 border-b-2 bg-active border-border">
         {/* block representing the color */}
         <MaterialColor />
         {/* block representing the name and the volume of the material */}
@@ -41,7 +41,7 @@ const MaterialBlock = ({ name, color, volume, materialIndex, selectedMaterial, s
 
   } else {
     return (
-      <button onClick={e => setSelectedMaterial(materialIndex)} className="flex items-center p-3 border-b-2 border-border">
+      <button onClick={e => updateSelectedField(materialIndex)} className="flex items-center p-3 border-b-2 border-border">
         {/* block representing the color */}
         <MaterialColor />
         {/* block representing the name and the volume of the material */}

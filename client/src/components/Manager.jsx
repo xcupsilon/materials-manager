@@ -23,7 +23,7 @@ const Manager = () => {
   const [matVolume, setMatVolume] = useState(0)
   const [matColor, setMatColor] = useState('')
   const [matCost, setMatCost] = useState(0)
-  const [deliveryDate, setDeliveryDate] = useState(null)
+  const [deliveryDate, setDeliveryDate] = useState(new Date())
 
   const retrieveMaterials = async () => {
     await axios.get('/api/materials/get_display_data')
@@ -38,6 +38,10 @@ const Manager = () => {
   useEffect(() => {
     retrieveMaterials()
   }, [])
+
+  useEffect(() => {
+    updateMaterial()
+  }, [matName, matColor, matCost, matVolume, deliveryDate])
 
   const addMaterial = async () => {
     await axios.post('/api/materials/add_material', {_id: uuidv4()})
@@ -65,6 +69,38 @@ const Manager = () => {
     })
   }
 
+  const updateSelectedField = async (index) => {
+    setSelectedMaterial(index)
+    await axios.post('/api/materials/get_material_data', { _id: materials[index]._id })
+    .then((res) => {
+      const { data } = res
+      const { material, color, volume, cost, date } = data
+      setMatName(material)
+      setMatColor(color)
+      setMatVolume(volume)
+      setMatCost(cost)
+      setDeliveryDate(date)
+    })
+    .catch(error => {
+      toast.error(`${error.response.data}`)
+    })
+  }
+
+  const updateMaterial = async () => {
+    await axios.post('/api/materials/update_material', {
+      _id: materials[selectedMaterial]._id, material: matName, color: matColor, volume: matVolume, cost: matCost, date: deliveryDate
+    })
+    .then(() => {
+      retrieveMaterials()
+      toast.dismiss('update_error');
+    })
+    .catch(error => {
+      toast.error(`${error.response.data}` ,{
+        id: 'update_error',
+      })
+    })
+  }
+
   return (
     <>
       <div className="w-screen h-screen bg-background">
@@ -79,8 +115,11 @@ const Manager = () => {
           </div>
 
           <div className="flex gap-6">
-            <MaterialsDisplay materials={materials} selectedMaterial={selectedMaterial} setSelectedMaterial={setSelectedMaterial} />
-            <SelectedMaterial />
+            <MaterialsDisplay materials={materials} selectedMaterial={selectedMaterial} updateSelectedField={updateSelectedField} />
+            <SelectedMaterial
+              name={matName} setMatName={setMatName} color={matColor} setMatColor={setMatColor} volume={matVolume} setMatVolume={setMatVolume}
+              cost={matCost} setMatCost={setMatCost} date={deliveryDate} setDeliveryDate={setDeliveryDate}
+            />
           </div> 
 
           <CostDisplay matCost={matCost} matVolume={matVolume} />
