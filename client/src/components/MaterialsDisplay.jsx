@@ -18,9 +18,9 @@ const MaterialsDisplay = ({ materials, selectedMaterial, setSelectedMaterial }) 
     return (
       <div className="flex gap-4 mt-[1.5rem]">
         <div className="flex flex-col w-[17rem] h-[22.13rem] bg-darker-background border-border border-2 overflow-auto">
-          {materials.map(material => {
+          {materials.map((material, index) => {
             const { material: name, color, volume } = material
-            return <MaterialBlock name={name} color={color} volume={volume} selectedMaterial={selectedMaterial} setSelectedMaterial={setSelectedMaterial} key={uuidv4()} />
+            return <MaterialBlock name={name} color={color} volume={volume} materialIndex={index} selectedMaterial={selectedMaterial} setSelectedMaterial={setSelectedMaterial} key={uuidv4()} />
           })}
         </div>
       </div>

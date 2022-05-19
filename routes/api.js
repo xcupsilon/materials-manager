@@ -26,9 +26,8 @@ router.post('/materials/get_material_data', async (req, res) => {
 router.post('/materials/add_material', async (req, res) => {
   try {
     const { body } = req
-    const { numMaterials } = body
-    console.log(numMaterials)
-    await Material.create({ material: `New Material ${numMaterials}` })
+    const { _id } = body
+    await Material.create({ _id })
     res.send(`New Material Created`)
   } catch (error) {
     console.log(error)
@@ -61,8 +60,8 @@ router.post('/materials/update_material', async (req, res) => {
 router.post('/materials/delete_material', async (req, res) => {
   try {
     const { body } = req
-    const { selectedMaterial: material } = body
-    await Material.deleteOne({ material })
+    const { _id } = body
+    await Material.deleteOne({ _id })
     res.send(`Material succesfully deleted.`)
   } catch (error) {
     res.status(400).send(`Error occurred when deleting material`)

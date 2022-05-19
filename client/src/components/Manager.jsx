@@ -2,27 +2,26 @@ import React, { useEffect, useState } from 'react'
 import axios from 'axios'
 import toast from 'react-hot-toast'
 
+import { v4 as uuidv4 } from 'uuid';
+
 // components
 import AddButton from './AddButton'
 import DeleteButton from './DeleteButton'
 import MaterialsDisplay from './MaterialsDisplay'
 import SelectedMaterial from './SelectedMaterial'
+import CostDisplay from './CostDisplay'
 
 const Manager = () => {
   // a list of all the currently available materials
   const [materials, setMaterials] = useState([])
 
-  console.log(materials)
-
-  // the index of the currently selected material (material name)
-  const [selectedMaterial, setSelectedMaterial] = useState("")
-
-  // counter to keep track of the numbers of materials available
-  const [numMaterials, setNumMaterials] = useState(0)
+  // the index of the currently selected material (material index)
+  const [selectedMaterial, setSelectedMaterial] = useState(-1)
 
   // material attributes of the currently selected component
   const [matName, setMatName] = useState('')
   const [matVolume, setMatVolume] = useState(0)
+  const [matColor, setMatColor] = useState('')
   const [matCost, setMatCost] = useState(0)
   const [deliveryDate, setDeliveryDate] = useState(null)
 
@@ -40,14 +39,12 @@ const Manager = () => {
     retrieveMaterials()
   }, [])
 
-  // everytime when materials changes
-  useEffect(() => {
-    setNumMaterials(materials.length)
-  }, [materials])
+  // // everytime when materials changes
+  // useEffect(() => {
+  // }, [materials])
 
   const addMaterial = async () => {
-    console.log(numMaterials)
-    await axios.post('/api/materials/add_material', {numMaterials})
+    await axios.post('/api/materials/add_material', {_id: uuidv4()})
     .then(() => {
       toast(`New Material Added`, {icon: '🪨'})
       retrieveMaterials()
@@ -58,7 +55,7 @@ const Manager = () => {
   }
 
   const deleteMaterial = async (selectedMaterial) => {
-    await axios.post('/api/materials/delete_material', {selectedMaterial})
+    await axios.post('/api/materials/delete_material', { _id: materials[selectedMaterial]._id })
     .then(() => {
       toast.success(`Material Succesfully Deleted`)
 
@@ -81,20 +78,16 @@ const Manager = () => {
           </h1>
 
           <div className="flex">
-            <AddButton addMaterial={addMaterial} numMaterials={numMaterials} />
+            <AddButton addMaterial={addMaterial} />
             <DeleteButton deleteMaterial={deleteMaterial} selectedMaterial={selectedMaterial} hasMaterial={materials.length !== 0} />
           </div>
 
-          <MaterialsDisplay materials={materials} selectedMaterial={selectedMaterial} setSelectedMaterial={setSelectedMaterial} />
+          <div className="flex gap-6">
+            <MaterialsDisplay materials={materials} selectedMaterial={selectedMaterial} setSelectedMaterial={setSelectedMaterial} />
+            <SelectedMaterial />
+          </div> 
 
-          <div className="flex justify-between w-[17rem] text-text mt-[1.5rem]">
-            <div>
-              Total Cost:
-            </div>
-            <div>
-              ${(matCost * matVolume).toFixed(2)}
-            </div>
-          </div>
+          <CostDisplay matCost={matCost} matVolume={matVolume} />
         </div>
       </div>
     </>
