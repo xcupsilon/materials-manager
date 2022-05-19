@@ -85,7 +85,7 @@ const Manager = () => {
             <DeleteButton deleteMaterial={deleteMaterial} selectedMaterial={selectedMaterial} hasMaterial={materials.length !== 0} />
           </div>
 
-          <MaterialsDisplay materials={materials} setSelectedMaterial={setSelectedMaterial} />
+          <MaterialsDisplay materials={materials} selectedMaterial={selectedMaterial} setSelectedMaterial={setSelectedMaterial} />
 
           <div className="flex justify-between w-[17rem] text-text mt-[1.5rem]">
             <div>
