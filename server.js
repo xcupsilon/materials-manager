@@ -1,7 +1,6 @@
 const express = require('express')
 const cookieSession = require('cookie-session')
 const mongoose = require('mongoose')
-const path = require('path')
 
 // Routers
 const ApiRouter = require('./routes/api')

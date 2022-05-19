@@ -1,12 +1,11 @@
 const { Schema, model } = require('mongoose')
 
 const materialSchema = new Schema({
-  material: {
-    type: String, required: true, unique: true, default: 'New Material',
-  },
-  volume: { type: Number, default: 10000 },
-  cost: { type: Number, default: 0.10 },
-  date: { type: Date },
+  material: { type: String, unique: true },
+  color: { type: String, default: '#72d5b9' },
+  volume: { type: Number, default: 0 },
+  cost: { type: Number, default: 0.00 },
+  date: { type: Date, default: null },
 })
 
 const Material = model('Material', materialSchema)

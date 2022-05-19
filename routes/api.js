@@ -15,8 +15,8 @@ router.get('/materials/get_display_data', async (req, res) => {
 router.post('/materials/get_material_data', async (req, res) => {
   try {
     const { body } = req
-    const { material } = body
-    const data = await Material.findOne({ material })
+    const { _id } = body
+    const data = await Material.findOne({ _id })
     res.json(data)
   } catch (error) {
     res.status(400).send(`Error occurred when fetching material data`)
@@ -26,28 +26,46 @@ router.post('/materials/get_material_data', async (req, res) => {
 router.post('/materials/add_material', async (req, res) => {
   try {
     const { body } = req
-    const { material } = body
-    await Material.create({})
+    const { numMaterials } = body
+    console.log(numMaterials)
+    await Material.create({ material: `New Material ${numMaterials}` })
     res.send(`New Material Created`)
   } catch (error) {
+    console.log(error)
     res.status(400).send('Error occurred when creating new material')
   }
 })
 
-router.post('/materials/update_material_name', async (req, res) => {
+router.post('/materials/update_material', async (req, res) => {
   try {
     const { body } = req
-    const { material, new_name } = body
-    await Material.updateOne({ material },
+    const {
+      _id, material, name, volume, cost, date,
+    } = body
+    await Material.updateOne({ _id },
       {
         $set:
         {
-          material: new_name,
+          material: name,
+          volume,
+          cost,
+          date,
         },
       })
-    res.send(`${material} name updated to ${new_name}`)
+    res.send(`Material ${material} succesfully updated.`)
   } catch (error) {
     res.status(400).send('Error occurred when updating material name')
+  }
+})
+
+router.post('/materials/delete_material', async (req, res) => {
+  try {
+    const { body } = req
+    const { selectedMaterial: material } = body
+    await Material.deleteOne({ material })
+    res.send(`Material succesfully deleted.`)
+  } catch (error) {
+    res.status(400).send(`Error occurred when deleting material`)
   }
 })
 
