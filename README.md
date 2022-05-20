@@ -1,5 +1,12 @@
 ## This is a prototype created by Rain Yan for Cesium's Material Manager exercise.
-To run the project, try npm install and proceed with npm run dev in the root directory. 
+To run the project, first clone it into a repo,
+```
+npm install
+cd ./client
+npm install
+cd ../
+npm run dev
+```
 
 For the frontend I used React with Tailwind styling; for the backend I used Node.js with the Express framework using MongoDB Atlas as my database.
 
