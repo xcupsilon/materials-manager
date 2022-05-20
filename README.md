@@ -1,5 +1,5 @@
 ## This is a prototype created by Rain Yan for Cesium's Material Manager exercise.
-To run the project, first clone it into a repo,
+To run the project, first clone it into a repo, then
 ```
 npm install
 cd ./client
