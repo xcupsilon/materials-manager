@@ -40,11 +40,26 @@ const Manager = () => {
   }, [])
 
   useEffect(() => {
+    const updateMaterial = async () => {
+      await axios.post('/api/materials/update_material', {
+        id: materials[selectedMaterial].id, material: matName, color: matColor, volume: matVolume, cost: matCost, date: deliveryDate
+      })
+      .then(() => {
+        retrieveMaterials()
+        toast.dismiss('update_error');
+      })
+      .catch(error => {
+        toast.error(`${error.response.data}` ,{
+          id: 'update_error',
+        })
+      })
+    }
+
     updateMaterial()
   }, [matName, matColor, matCost, matVolume, deliveryDate])
 
   const addMaterial = async () => {
-    await axios.post('/api/materials/add_material', {_id: uuidv4()})
+    await axios.post('/api/materials/add_material', {id: uuidv4()})
     .then(() => {
       toast(`New Material Added`, {icon: '🪨'})
       retrieveMaterials()
@@ -55,12 +70,12 @@ const Manager = () => {
   }
 
   const deleteMaterial = async (selectedMaterial) => {
-    await axios.post('/api/materials/delete_material', { _id: materials[selectedMaterial]._id })
+    await axios.post('/api/materials/delete_material', { id: materials[selectedMaterial].id })
     .then(() => {
       toast.success(`Material Succesfully Deleted`)
 
       // reset the currently selected material
-      setSelectedMaterial('')
+      setSelectedMaterial(-1)
 
       retrieveMaterials()
     })
@@ -71,7 +86,7 @@ const Manager = () => {
 
   const updateSelectedField = async (index) => {
     setSelectedMaterial(index)
-    await axios.post('/api/materials/get_material_data', { _id: materials[index]._id })
+    await axios.post('/api/materials/get_material_data', { id: materials[index].id })
     .then((res) => {
       const { data } = res
       const { material, color, volume, cost, date } = data
@@ -83,21 +98,6 @@ const Manager = () => {
     })
     .catch(error => {
       toast.error(`${error.response.data}`)
-    })
-  }
-
-  const updateMaterial = async () => {
-    await axios.post('/api/materials/update_material', {
-      _id: materials[selectedMaterial]._id, material: matName, color: matColor, volume: matVolume, cost: matCost, date: deliveryDate
-    })
-    .then(() => {
-      retrieveMaterials()
-      toast.dismiss('update_error');
-    })
-    .catch(error => {
-      toast.error(`${error.response.data}` ,{
-        id: 'update_error',
-      })
     })
   }
 
@@ -118,7 +118,7 @@ const Manager = () => {
             <MaterialsDisplay materials={materials} selectedMaterial={selectedMaterial} updateSelectedField={updateSelectedField} />
             <SelectedMaterial
               name={matName} setMatName={setMatName} color={matColor} setMatColor={setMatColor} volume={matVolume} setMatVolume={setMatVolume}
-              cost={matCost} setMatCost={setMatCost} date={deliveryDate} setDeliveryDate={setDeliveryDate}
+              cost={matCost} setMatCost={setMatCost} date={deliveryDate} setDeliveryDate={setDeliveryDate} selectedMaterial={selectedMaterial}
             />
           </div> 
 

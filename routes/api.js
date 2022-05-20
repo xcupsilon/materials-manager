@@ -7,7 +7,7 @@ const Material = require('../models/material')
 router.get('/materials/get_display_data', async (req, res) => {
   try {
     const data = await Material.find()
-    res.json(data)
+    res.status(200).json(data)
   } catch (error) {
     res.status(400).send('Error occurred when fetching display data for materials')
   }
@@ -16,9 +16,9 @@ router.get('/materials/get_display_data', async (req, res) => {
 router.post('/materials/get_material_data', async (req, res) => {
   try {
     const { body } = req
-    const { _id } = body
-    const data = await Material.findOne({ _id })
-    res.json(data)
+    const { id } = body
+    const data = await Material.findOne({ id })
+    res.status(200).json(data)
   } catch (error) {
     res.status(400).send(`Error occurred when fetching material data`)
   }
@@ -27,9 +27,9 @@ router.post('/materials/get_material_data', async (req, res) => {
 router.post('/materials/add_material', async (req, res) => {
   try {
     const { body } = req
-    const { _id } = body
-    await Material.create({ _id })
-    res.send(`New Material Created`)
+    const { id } = body
+    await Material.create({ id })
+    res.status(200).json(id)
   } catch (error) {
     res.status(400).send('Error occurred when creating new material')
   }
@@ -41,6 +41,7 @@ router.post(
   validatorBody('color', 'Invalid Color').isHexColor(),
   validatorBody('volume', 'Invalid volume').isFloat({ min: 0 }),
   validatorBody('cost', 'Invalid cost').isFloat({ min: 0 }),
+  validatorBody('date', 'Invalid date').notEmpty(),
   async (req, res) => {
     const { errors } = validationResult(req)
     if (errors.length !== 0) {
@@ -50,10 +51,10 @@ router.post(
     try {
       const { body } = req
       const {
-        _id, material, color, volume, cost, date,
+        id, material, color, volume, cost, date,
       } = body
 
-      await Material.updateOne({ _id },
+      await Material.updateOne({ id },
         {
           $set:
           {
@@ -64,7 +65,7 @@ router.post(
             date,
           },
         })
-      res.send(`Material ${material} succesfully updated.`)
+      res.status(200).json(`Material succesfully updated.`)
     } catch (error) {
       res.status(400).send(`Error occurred when updating material ${error.message}`)
     }
@@ -74,9 +75,13 @@ router.post(
 router.post('/materials/delete_material', async (req, res) => {
   try {
     const { body } = req
-    const { _id } = body
-    await Material.deleteOne({ _id })
-    res.send(`Material succesfully deleted.`)
+    const { id } = body
+    const { material } = await Material.findOne({ id })
+    if (!material) {
+      res.status(400).send(`Material not found`)
+    }
+    await Material.deleteOne({ id })
+    res.status(200).send(`Material succesfully deleted.`)
   } catch (error) {
     res.status(400).send(`Error occurred when deleting material`)
   }

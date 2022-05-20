@@ -6,7 +6,7 @@ const materialSchema = new Schema({
   volume: { type: Number, min: [0, 'Volume can\'t be negative'], default: 0 },
   cost: { type: Number, min: [0, 'Cost can\'t be negative'], default: 0.00 },
   date: { type: Date, default: null },
-  _id: { type: String, unique: true },
+  id: { type: String, unique: true },
 })
 
 const Material = model('Material', materialSchema)

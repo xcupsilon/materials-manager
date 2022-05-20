@@ -1,27 +1,12 @@
-const express = require('express')
-const cookieSession = require('cookie-session')
-const mongoose = require('mongoose')
+const createServer = require('./appserver')
 
 // Routers
 const ApiRouter = require('./routes/api')
 
-// Start the app and get mongoDB url
-const app = express()
-const MONGO_URL = process.env.MONGODB_URL || 'mongodb+srv://xcyan:xcyancesium@prototype.lplwy.mongodb.net/?retryWrites=true&w=majority'
+const app = createServer()
 
-app.use(express.json()) // Parse body using middleware
-
-// If connection fails, will show up here
-mongoose.connect(MONGO_URL, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-})
-
-app.use(cookieSession({
-  name: 'session',
-  keys: ['mango!'],
-  maxAge: 24 * 60 * 60 * 1000, // expiration time: 24 hours
-}))
+// Connect to mongodb
+require('./mongoConfig')
 
 app.use('/api', ApiRouter)
 
