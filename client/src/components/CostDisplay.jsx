@@ -5,7 +5,7 @@ const CostDisplay = ({ matVolume, matCost }) => (
     <div>
       Total Cost:
     </div>
-    <div>
+    <div data-testid='totalcostdiv'>
       ${(matCost * matVolume).toFixed(2)}
     </div>
   </div>

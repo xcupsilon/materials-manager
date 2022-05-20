@@ -1,15 +1,13 @@
 import React, { useEffect, useState } from 'react'
 import axios from 'axios'
 import toast from 'react-hot-toast'
-
-import { v4 as uuidv4 } from 'uuid';
-
 // components
 import AddButton from './AddButton'
 import DeleteButton from './DeleteButton'
 import MaterialsDisplay from './MaterialsDisplay'
 import SelectedMaterial from './SelectedMaterial'
 import CostDisplay from './CostDisplay'
+import { v4 as uuidv4 } from 'uuid'
 
 const Manager = () => {
   // a list of all the currently available materials

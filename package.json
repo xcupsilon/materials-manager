@@ -2,7 +2,7 @@
   "name": "materials-manager",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "./build/index.js",
   "keywords": [],
   "author": "Xiaocong Yan",
   "license": "ISC",
@@ -13,8 +13,10 @@
     "test": "jest"
   },
   "dependencies": {
+    "@testing-library/react": "^13.2.0",
     "axios": "^0.27.2",
     "babel-eslint": "^10.1.0",
+    "babel-preset-expo": "^9.1.0",
     "body-parser": "^1.18.3",
     "cookie-session": "^2.0.0",
     "eslint": "^6.8.0",
@@ -22,6 +24,7 @@
     "express": "^4.16.4",
     "express-validator": "^6.14.0",
     "jest": "^28.1.0",
+    "jest-environment-jsdom": "^28.1.0",
     "mongodb-memory-server": "^8.5.2",
     "mongoose": "^6.3.3",
     "nodemon": "^2.0.16"

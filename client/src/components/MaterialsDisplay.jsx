@@ -1,6 +1,6 @@
-import React from 'react';
-import MaterialBlock from './MaterialBlock';
-import { v4 as uuidv4 } from 'uuid';
+import React from 'react'
+import MaterialBlock from './MaterialBlock'
+import { v4 as uuidv4 } from 'uuid'
 
 const MaterialsDisplay = ({ materials, selectedMaterial, updateSelectedField }) => {
   if (!materials) {
